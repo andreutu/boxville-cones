@@ -1,11 +1,18 @@
+local cones = {}
+
 exports['qb-target']:AddTargetBone("cone_l", {
 	options = {
 		{
-			icon = 'custom cone-pickup',
+			icon = Config.PickupIcon,
 			label = Config.Lang.TakeCarLabel,
 			action = function(entity)
-				if PlayerHasCone then return TriggerServerEvent('boxville-cones:Server:PlaceConeInVan', VehToNet(entity), 'left') end
-				TriggerServerEvent("boxville-cones:Server:TakeCone", VehToNet(entity), 'left')
+				local netEntity = VehToNet(entity)
+
+				if PlayerHasCone then
+					return TriggerServerEvent('boxville-cones:server:PlaceConeInVan', netEntity, 'left')
+				end
+
+				TriggerServerEvent("boxville-cones:server:TakeCone", netEntity, 'left')
 			end
 		}
 	},
@@ -15,26 +22,31 @@ exports['qb-target']:AddTargetBone("cone_l", {
 exports['qb-target']:AddTargetBone("cone_r", {
 	options = {
 		{
-			icon = 'custom cone-pickup',
+			icon = Config.PickupIcon,
 			label = Config.Lang.TakeCarLabel,
 			action = function(entity)
-				if PlayerHasCone then return TriggerServerEvent('boxville-cones:Server:PlaceConeInVan', VehToNet(entity), 'right') end
-				TriggerServerEvent("boxville-cones:Server:TakeCone", VehToNet(entity), 'right')
+				local netEntity = VehToNet(entity)
+
+				if PlayerHasCone then
+					return TriggerServerEvent('boxville-cones:server:PlaceConeInVan', netEntity, 'right')
+				end
+
+				TriggerServerEvent("boxville-cones:server:TakeCone", netEntity, 'right')
 			end
 		}
 	},
 	distance = Config.Distance,
 })
 
-RegisterNetEvent('boxville-cones:Client:TakeCone', function()
+RegisterNetEvent('boxville-cones:client:TakeCone', function()
 	PlayEmote()
 end)
 
-RegisterNetEvent('boxville-cones:Client:PlaceConeInVan', function()
+RegisterNetEvent('boxville-cones:client:PlaceConeInVan', function()
 	CancelEmote()
 end)
 
-RegisterNetEvent('boxville-cones:Client:ToggleCones', function(veh, stack, toggle)
+RegisterNetEvent('boxville-cones:client:ToggleCones', function(veh, stack, toggle)
 	local extra
 
 	if stack == 'left' then
@@ -46,7 +58,7 @@ RegisterNetEvent('boxville-cones:Client:ToggleCones', function(veh, stack, toggl
 	SetVehicleExtra(NetToVeh(veh), extra, toggle)
 end)
 
-RegisterNetEvent('boxville-cones:Client:PlaceCone', function()
+RegisterNetEvent('boxville-cones:client:PlaceCone', function()
 	exports['qb-radialmenu']:RemoveOption('boxville-cones:placeCone')
 
 	local ped = PlayerPedId()
@@ -58,31 +70,52 @@ RegisterNetEvent('boxville-cones:Client:PlaceCone', function()
 
 	Wait(930)
 
-	local position = GetEntityCoords(ped)
-	local fwdvector = GetEntityForwardVector(ped)
+	RequestModel(Config.ConeProp)
+
+	while not HasModelLoaded(Config.ConeProp) do
+		Wait(0)
+	end
 
 	DestroyCone()
 
-	local obj = CreateObject('prop_mp_cone_02', position.x + fwdvector.x * 0.5, position.y + fwdvector.y * 0.5,
-		position.z - 0.85, true, true, false)
-	ActivatePhysics(obj)
+	local coords = GetEntityCoords(ped)
+	local heading = GetEntityHeading(ped)
+	local vector = GetEntityForwardVector(ped)
+	local x, y, z = table.unpack(coords + vector * 0.5)
+	local obj = CreateObject(Config.ConeProp, x, y, z, true, true, true)
+	local netId = NetworkGetNetworkIdFromEntity(obj)
+	SetNetworkIdExistsOnAllMachines(netId, true)
+	SetNetworkIdCanMigrate(netId, false)
+	SetEntityHeading(obj, heading)
+	PlaceObjectOnGroundProperly(obj)
+	SetModelAsNoLongerNeeded(obj)
 
-	exports['qb-target']:AddTargetEntity(obj, {
+	Wait(100)
+
+	TriggerServerEvent('boxville-cones:server:AddTarget', netId)
+
+	IsInAnimation = false
+end)
+
+RegisterNetEvent('boxville-cones:client:AddTarget', function(netId)
+	exports['qb-target']:AddTargetEntity(NetworkGetEntityFromNetworkId(netId), {
 		options = {
 			{
-				icon = 'custom cone-pickup',
+				icon = Config.PickupIcon,
 				label = Config.Lang.TakeLabel,
 				action = function(entity)
 					if PlayerHasCone then return end
 
-					DeleteEntity(entity)
-					TriggerEvent('boxville-cones:Client:TakeCone')
+					TriggerServerEvent('boxville-cones:server:DeleteCone', ObjToNet(entity))
+					TriggerEvent('boxville-cones:client:TakeCone')
 				end
 			}
 		},
 
 		distance = Config.Distance
 	})
+end)
 
-	IsInAnimation = false
+RegisterNetEvent('boxville-cones:client:DeleteCone', function(entity)
+	DeleteEntity(NetToObj(entity))
 end)

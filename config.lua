@@ -2,35 +2,38 @@ Config = {}
 
 Config.Distance = 1.5
 
-Config.Icon = 'fas fa-boxes-stacked'
-Config.TargetIcon = 'fas fa-upload'
+Config.PickupIcon = 'custom cone-pickup'
+Config.PlaceIcon = 'custom cone-place'
 
 Config.DefaultLeftCones = 6
 Config.LeftExtra = 1
 Config.DefaultRightCones = 5
 Config.RightExtra = 2
 
+Config.ConeProp = `prop_mp_cone_02`
+
 Config.ConeAnimation = {
 	'missfbi4prepp1',
 	'_idle_garbage_man',
 
 	AnimationOptions = {
-		Prop = 'prop_mp_cone_02',
+		Prop = Config.ConeProp,
 		PropBone = 57005,
-		PropPlacement = { 0.09, -0.6, 0.0, -93.0, 0.0, 0.0 },
+		PropOffset = { 0.09, -0.6, 0.0 },
+		PropRotation = { -93.0, 0.0, 0.0 },
 		EmoteLoop = true,
-		EmoteMoving = true,
+		EmoteMoving = true
 	}
 }
 
 Config.DropAnimation = {
-    'anim@narcotics@trash',
+	'anim@narcotics@trash',
 	'drop_front'
 }
 
 Config.Lang = {
-    TakeCarLabel = 'Take / Place Cone',
-    PlaceLabel = 'Place Cone',
+	TakeCarLabel = 'Take / Place Cone',
+	PlaceLabel = 'Place Cone',
 	TakeLabel = 'Pickup Cone'
 }
 

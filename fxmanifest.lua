@@ -9,12 +9,13 @@ lua54 'yes'
 
 client_scripts {
 	'client/cl_main.lua',
-	'client/cl_animation.lua',
-	'client/cl_debug.lua'
+	'client/cl_animation.lua'
 }
 
 server_scripts {
-	'server/sv_main.lua'
+	'server/sv_main.lua',
+	'server/sv_debug.lua'
+
 }
 
 shared_script 'config.lua'
