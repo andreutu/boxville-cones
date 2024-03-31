@@ -1,3 +1,5 @@
+local cones = {}
+
 RegisterNetEvent("boxville-cones:server:PlaceConeInVan", function(vehicle, stack)
 	local entity = NetworkGetEntityFromNetworkId(vehicle)
 	local amount
@@ -66,11 +68,34 @@ RegisterNetEvent("boxville-cones:server:TakeCone", function(vehicle, stack)
 	end
 end)
 
-RegisterNetEvent('boxville-cones:server:AddTarget', function(obj)
-	TriggerClientEvent('boxville-cones:client:AddTarget', -1, obj)
+RegisterNetEvent('boxville-cones:server:AddTarget', function(netId)
+	table.insert(cones, netId)
+	TriggerClientEvent('boxville-cones:client:AddTarget', -1, netId)
 end)
 
-RegisterNetEvent('boxville-cones:server:DeleteCone', function(obj)
-	local entity = NetworkGetEntityFromNetworkId(obj)
-	TriggerClientEvent('boxville-cones:client:DeleteCone', NetworkGetEntityOwner(entity), obj)
+RegisterNetEvent('boxville-cones:server:DeleteCone', function(netId)
+	local pos
+
+    for k, v in ipairs(cones) do
+        if v == netId then
+            pos = k
+            break
+        end
+    end
+
+	if not pos then
+		return
+	end
+
+	local entity = NetworkGetEntityFromNetworkId(netId)
+	TriggerClientEvent('boxville-cones:client:DeleteCone', NetworkGetEntityOwner(entity), netId)
+end)
+
+RegisterNetEvent('boxville-cones:server:LoadCones', function()
+    for _, netId in ipairs(cones) do
+        if DoesEntityExist(NetworkGetEntityFromNetworkId(netId)) == 1 then
+			print("triggering", source)
+			TriggerClientEvent('boxville-cones:client:AddTarget', source, netId)
+		end
+	end
 end)

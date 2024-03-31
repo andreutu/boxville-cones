@@ -98,6 +98,7 @@ RegisterNetEvent('boxville-cones:client:PlaceCone', function()
 end)
 
 RegisterNetEvent('boxville-cones:client:AddTarget', function(netId)
+	print('adding target')
 	exports['qb-target']:AddTargetEntity(NetworkGetEntityFromNetworkId(netId), {
 		options = {
 			{
@@ -118,4 +119,9 @@ end)
 
 RegisterNetEvent('boxville-cones:client:DeleteCone', function(entity)
 	DeleteEntity(NetToObj(entity))
+end)
+
+AddEventHandler('QBCore:Client:OnPlayerLoaded', function()
+	Wait(1000)
+	TriggerServerEvent('boxville-cones:server:LoadCones')
 end)
