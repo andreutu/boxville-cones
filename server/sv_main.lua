@@ -8,21 +8,21 @@ RegisterNetEvent("boxville-cones:server:PlaceConeInVan", function(vehicle, stack
 		amount = Entity(entity).state.leftCones or Config.DefaultLeftCones
 
 		if amount < Config.DefaultLeftCones then
-            Entity(entity).state.leftCones = amount + 1
+			Entity(entity).state.leftCones = amount + 1
 			TriggerClientEvent('boxville-cones:client:PlaceConeInVan', source, entity, stack)
-        else
+		else
 			return
 		end
-    elseif stack == "right" then
+	elseif stack == "right" then
 		amount = Entity(entity).state.rightCones or Config.DefaultRightCones
 
 		if amount < Config.DefaultRightCones then
-            Entity(entity).state.rightCones = amount + 1
+			Entity(entity).state.rightCones = amount + 1
 			TriggerClientEvent('boxville-cones:client:PlaceConeInVan', source, entity, stack)
-        else
+		else
 			return
 		end
-    end
+	end
 
 	if amount == 0 then
 		TriggerClientEvent("boxville-cones:client:ToggleCones", NetworkGetEntityOwner(entity), vehicle, stack, false)
@@ -36,31 +36,31 @@ end)
 
 RegisterNetEvent("boxville-cones:server:TakeCone", function(vehicle, stack)
 	local entity = NetworkGetEntityFromNetworkId(vehicle)
-    local amount
+	local amount
 
-    if stack == "left" then
-        amount = Entity(entity).state.leftCones or Config.DefaultLeftCones
+	if stack == "left" then
+		amount = Entity(entity).state.leftCones or Config.DefaultLeftCones
 
-        if amount > 0 then
+		if amount > 0 then
 			Entity(entity).state.leftCones = amount - 1
 			TriggerClientEvent('boxville-cones:client:TakeCone', source, entity, stack)
 		else
 			return
-        end
-    elseif stack == "right" then
-        amount = Entity(entity).state.rightCones or Config.DefaultRightCones
+		end
+	elseif stack == "right" then
+		amount = Entity(entity).state.rightCones or Config.DefaultRightCones
 
-        if amount > 0 then
+		if amount > 0 then
 			Entity(entity).state.rightCones = amount - 1
 			TriggerClientEvent('boxville-cones:client:TakeCone', source, entity, stack)
 		else
 			return
-        end
-    end
+		end
+	end
 
-    if amount - 1 == 0 then
-        TriggerClientEvent("boxville-cones:client:ToggleCones", NetworkGetEntityOwner(entity), vehicle, stack, true)
-    end
+	if amount - 1 == 0 then
+		TriggerClientEvent("boxville-cones:client:ToggleCones", NetworkGetEntityOwner(entity), vehicle, stack, true)
+	end
 
 	if Config.Debug then
 		local text = (Entity(entity).state.leftCones or -1) .. ' ' .. (Entity(entity).state.rightCones or -1)
@@ -76,12 +76,12 @@ end)
 RegisterNetEvent('boxville-cones:server:DeleteCone', function(netId)
 	local pos
 
-    for k, v in ipairs(cones) do
-        if v == netId then
-            pos = k
-            break
-        end
-    end
+	for index, id in ipairs(cones) do
+		if id == netId then
+			pos = index
+			break
+		end
+	end
 
 	if not pos then
 		return
@@ -92,9 +92,8 @@ RegisterNetEvent('boxville-cones:server:DeleteCone', function(netId)
 end)
 
 RegisterNetEvent('boxville-cones:server:LoadCones', function()
-    for _, netId in ipairs(cones) do
-        if DoesEntityExist(NetworkGetEntityFromNetworkId(netId)) == 1 then
-			print("triggering", source)
+	for _, netId in ipairs(cones) do
+		if DoesEntityExist(NetworkGetEntityFromNetworkId(netId)) == 1 then
 			TriggerClientEvent('boxville-cones:client:AddTarget', source, netId)
 		end
 	end

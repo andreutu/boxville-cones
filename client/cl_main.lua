@@ -98,7 +98,6 @@ RegisterNetEvent('boxville-cones:client:PlaceCone', function()
 end)
 
 RegisterNetEvent('boxville-cones:client:AddTarget', function(netId)
-	print('adding target')
 	exports['qb-target']:AddTargetEntity(NetworkGetEntityFromNetworkId(netId), {
 		options = {
 			{
