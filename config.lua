@@ -37,4 +37,4 @@ Config.Lang = {
 	TakeLabel = 'Pickup Cone'
 }
 
-Config.Debug = true
+Config.Debug = false
