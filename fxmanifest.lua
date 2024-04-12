@@ -9,7 +9,8 @@ lua54 'yes'
 
 client_scripts {
 	'client/cl_main.lua',
-	'client/cl_animation.lua'
+	'client/cl_animation.lua',
+	'client/cl_resupplies.lua'
 }
 
 server_scripts {

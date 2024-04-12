@@ -37,4 +37,10 @@ Config.Lang = {
 	TakeLabel = 'Pickup Cone'
 }
 
+Config.ResupplyPoints = {
+	[1] = vector3(428.4, -647.23, 28.5),
+	[2] = vector3(428.73, -637.44, 28.5),
+	[3] = vector3(423.5, -631.28, 28.5)
+}
+
 Config.Debug = false
