@@ -20,3 +20,5 @@ server_scripts {
 }
 
 shared_script 'config.lua'
+
+data_file 'DLC_ITYP_REQUEST' 'stream/box_cones_ytyp.ytyp'
