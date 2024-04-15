@@ -123,4 +123,36 @@ end)
 AddEventHandler('QBCore:Client:OnPlayerLoaded', function()
 	Wait(1000)
 	TriggerServerEvent('boxville-cones:server:LoadCones')
+
+	local prop = Config.RessuplyPointsProp
+
+	RequestModel(prop)
+
+	while not HasModelLoaded(prop) do
+		Wait(0)
+	end
+
+	for _, data in ipairs(Config.ResupplyPoints) do
+		local x, y, z, w = table.unpack(data)
+
+		local obj = CreateObject(prop, x, y, z, true, true, false)
+		SetEntityHeading(obj, w)
+		PlaceObjectOnGroundProperly(obj)
+
+		exports['qb-target']:AddTargetEntity(obj, {
+			options = {
+				{
+					icon = Config.PickupIcon,
+					label = Config.Lang.RessuplyLabel,
+					action = function()
+						if PlayerHasCone then return CancelEmote() end
+	
+						TriggerEvent('boxville-cones:client:TakeCone')
+					end
+				}
+			},
+	
+			distance = Config.Distance
+		})
+	end
 end)

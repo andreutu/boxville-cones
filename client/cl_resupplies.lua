@@ -1,14 +1,13 @@
-function createResupplyBox(index)
+local function createResupplyBox(index)
 	local x, y, z, w = table.unpack(Config.ResupplyPoints[tonumber(index)])
-	local prop = `cprop_box_cones`
 
-	RequestModel(prop)
+	RequestModel(Config.RessuplyPointsProp)
 
-	while not HasModelLoaded(prop) do
+	while not HasModelLoaded(Config.RessuplyPointsProp) do
 		Wait(0)
 	end
 
-    local obj = CreateObject(prop, x, y, z, true, true, false)
+    local obj = CreateObject(Config.RessuplyPointsProp, x, y, z, true, true, false)
 	SetEntityHeading(obj, w)
 	PlaceObjectOnGroundProperly(obj)
 end

@@ -34,7 +34,8 @@ Config.DropAnimation = {
 Config.Lang = {
 	TakeCarLabel = 'Take / Place Cone',
 	PlaceLabel = 'Place Cone',
-	TakeLabel = 'Pickup Cone'
+	TakeLabel = 'Pickup Cone',
+	RessuplyLabel = 'Take Cone'
 }
 
 Config.ResupplyPoints = {
@@ -42,5 +43,7 @@ Config.ResupplyPoints = {
 	[2] = vector4(428.52, -639.43, 28.5, 354.38),
 	[3] = vector4(424.43, -643.43, 28.5, 131.89)
 }
+
+Config.RessuplyPointsProp = `cprop_box_cones`
 
 Config.Debug = false
