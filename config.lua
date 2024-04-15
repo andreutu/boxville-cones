@@ -32,7 +32,7 @@ Config.DropAnimation = {
 }
 
 Config.Lang = {
-	TakeCarLabel = 'Take / Place Cone',
+	TakeCarLabel = 'Take Cone',
 	PlaceLabel = 'Place Cone',
 	TakeLabel = 'Pickup Cone',
 	RessuplyLabel = 'Take Cone'
