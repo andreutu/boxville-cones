@@ -11,6 +11,7 @@ Config.DefaultRightCones = 5
 Config.RightExtra = 2
 
 Config.ConeProp = `prop_mp_cone_02`
+Config.RessuplyPointsProp = `cprop_box_cones`
 
 Config.ConeAnimation = {
 	'missfbi4prepp1',
@@ -31,19 +32,10 @@ Config.DropAnimation = {
 	'drop_front'
 }
 
-Config.Lang = {
-	TakeCarLabel = 'Take / Place Cone',
-	PlaceLabel = 'Place Cone',
-	TakeLabel = 'Pickup Cone',
-	RessuplyLabel = 'Take / Put Back Cone'
-}
-
 Config.ResupplyPoints = {
 	[1] = vector4(428.15, -642.02, 28.5, 86.32),
 	[2] = vector4(428.52, -639.43, 28.5, 354.38),
 	[3] = vector4(424.43, -643.43, 28.5, 131.89)
 }
-
-Config.RessuplyPointsProp = `cprop_box_cones`
 
 Config.Debug = false

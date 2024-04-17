@@ -66,7 +66,7 @@ function PlayEmote()
 
 	exports['qb-radialmenu']:AddOption({
 		id = 'placeCone',
-		title = Config.Lang.PlaceLabel,
+		title = Lang:t('text.place'),
 		icon = Config.PlaceIcon,
 		type = 'client',
 		event = 'boxville-cones:client:PlaceCone',

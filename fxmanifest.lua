@@ -19,6 +19,10 @@ server_scripts {
 
 }
 
-shared_script 'config.lua'
+shared_scripts {
+    'config.lua',
+	'@qb-core/shared/locale.lua',
+	'lang/en.lua'
+}
 
 data_file 'DLC_ITYP_REQUEST' 'stream/box_cones_ytyp.ytyp'

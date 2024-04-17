@@ -4,7 +4,7 @@ exports['qb-target']:AddTargetBone("cone_l", {
 	options = {
 		{
 			icon = Config.PickupIcon,
-			label = Config.Lang.TakeCarLabel,
+			label = Lang:t('text.take_car'),
 			action = function(entity)
 				local netEntity = VehToNet(entity)
 
@@ -23,7 +23,7 @@ exports['qb-target']:AddTargetBone("cone_r", {
 	options = {
 		{
 			icon = Config.PickupIcon,
-			label = Config.Lang.TakeCarLabel,
+			label = Lang:t('text.take_car'),
 			action = function(entity)
 				local netEntity = VehToNet(entity)
 
@@ -102,7 +102,7 @@ RegisterNetEvent('boxville-cones:client:AddTarget', function(netId)
 		options = {
 			{
 				icon = Config.PickupIcon,
-				label = Config.Lang.TakeLabel,
+				label = Lang:t('text.take'),
 				action = function(entity)
 					if PlayerHasCone then return end
 
@@ -143,15 +143,15 @@ AddEventHandler('QBCore:Client:OnPlayerLoaded', function()
 			options = {
 				{
 					icon = Config.PickupIcon,
-					label = Config.Lang.RessuplyLabel,
+					label = Lang:t('text.resupply'),
 					action = function()
 						if PlayerHasCone then return CancelEmote() end
-	
+
 						TriggerEvent('boxville-cones:client:TakeCone')
 					end
 				}
 			},
-	
+
 			distance = Config.Distance
 		})
 	end
