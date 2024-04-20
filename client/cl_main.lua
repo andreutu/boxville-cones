@@ -42,6 +42,26 @@ exports['qb-target']:AddTargetBone("cone_r", {
 	distance = Config.Distance,
 })
 
+exports['qb-target']:AddTargetModel(Config.RessuplyPointsProp, {
+	options = {
+		{
+			icon = Config.PickupIcon,
+			label = Lang:t('text.take'),
+			action = function()
+				if PlayerHasCone then
+					Notify('notify.put_back')
+					return CancelEmote()
+				end
+
+				TriggerEvent('boxville-cones:client:TakeCone')
+				Notify('notify.take')
+			end
+		}
+	},
+
+	distance = Config.Distance
+})
+
 RegisterNetEvent('boxville-cones:client:TakeCone', function()
 	PlayEmote()
 end)
@@ -122,28 +142,6 @@ RegisterNetEvent('boxville-cones:client:AddTarget', function(netId)
 	})
 end)
 
-RegisterNetEvent('boxville-cones:client:AddResupplyPointTarget', function(netId)
-	exports['qb-target']:AddTargetEntity(NetworkGetEntityFromNetworkId(netId), {
-		options = {
-			{
-				icon = Config.PickupIcon,
-				label = Lang:t('text.take'),
-				action = function()
-					if PlayerHasCone then
-						Notify('notify.put_back')
-						return CancelEmote()
-					end
-
-					TriggerEvent('boxville-cones:client:TakeCone')
-					Notify('notify.take')
-				end
-			}
-		},
-
-		distance = Config.Distance
-	})
-end)
-
 RegisterNetEvent('boxville-cones:client:DeleteCone', function(entity)
 	DeleteEntity(NetToObj(entity))
 end)
@@ -151,44 +149,6 @@ end)
 AddEventHandler('QBCore:Client:OnPlayerLoaded', function()
 	Wait(1000)
 	TriggerServerEvent('boxville-cones:server:LoadCones')
-	TriggerServerEvent('boxville-cones:server:LoadResupplyPoints')
-end)
-
-RegisterNetEvent('boxville-cones:client:LoadResupplyPoints', function()
-	local prop = Config.RessuplyPointsProp
-
-	RequestModel(prop)
-	while not HasModelLoaded(prop) do
-		Wait(0)
-	end
-
-	for _, data in ipairs(Config.ResupplyPoints) do
-		local x, y, z, w = table.unpack(data)
-
-		local obj = CreateObject(prop, x, y, z - 1, true, true, true)
-		TriggerServerEvent('boxville-cones:server:AddResupplyPointTarget', NetworkGetNetworkIdFromEntity(obj))
-		SetEntityHeading(obj, w)
-
-		exports['qb-target']:AddTargetEntity(obj, {
-			options = {
-				{
-					icon = Config.PickupIcon,
-					label = Lang:t('text.resupply'),
-					action = function()
-						if PlayerHasCone then
-							Notify('notify.put_back')
-							return CancelEmote()
-						end
-
-						TriggerEvent('boxville-cones:client:TakeCone')
-						Notify('notify.take')
-					end
-				}
-			},
-
-			distance = Config.Distance
-		})
-	end
 end)
 
 function Notify(message)
