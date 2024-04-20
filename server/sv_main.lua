@@ -1,4 +1,6 @@
 local cones = {}
+local resupplyPoints = {}
+local spawnedResupplyPoints = false
 
 RegisterNetEvent("boxville-cones:server:PlaceConeInVan", function(vehicle, stack)
 	local entity = NetworkGetEntityFromNetworkId(vehicle)
@@ -97,4 +99,26 @@ RegisterNetEvent('boxville-cones:server:LoadCones', function()
 			TriggerClientEvent('boxville-cones:client:AddTarget', source, netId)
 		end
 	end
+end)
+
+RegisterNetEvent('boxville-cones:server:LoadResupplyPoints', function()
+	if spawnedResupplyPoints then
+		for _, netId in ipairs(resupplyPoints) do
+			if DoesEntityExist(NetworkGetEntityFromNetworkId(netId)) == 1 then
+				TriggerClientEvent('boxville-cones:client:AddResupplyPointTarget', source, netId)
+			else
+				-- Pretty scuffed way of dealing with this problem, but it's the best one...
+				resupplyPoints = {}
+				TriggerClientEvent('boxville-cones:client:LoadResupplyPoints', source)
+				return
+			end
+		end
+	else
+		spawnedResupplyPoints = true
+		TriggerClientEvent('boxville-cones:client:LoadResupplyPoints', source)
+	end
+end)
+
+RegisterNetEvent('boxville-cones:server:AddResupplyPointTarget', function(netId)
+	table.insert(resupplyPoints, netId)
 end)
