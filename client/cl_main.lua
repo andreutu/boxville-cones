@@ -1,4 +1,4 @@
-local cones = {}
+local QBCore = exports['qb-core']:GetCoreObject()
 
 exports['qb-target']:AddTargetBone("cone_l", {
 	options = {
@@ -8,11 +8,13 @@ exports['qb-target']:AddTargetBone("cone_l", {
 			action = function(entity)
 				local netEntity = VehToNet(entity)
 
-				if PlayerHasCone then
-					return TriggerServerEvent('boxville-cones:server:PlaceConeInVan', netEntity, 'left')
+                if PlayerHasCone then
+					Notify('notify.put_back')
+                    return TriggerServerEvent('boxville-cones:server:PlaceConeInVan', netEntity, 'left')
 				end
 
-				TriggerServerEvent("boxville-cones:server:TakeCone", netEntity, 'left')
+                TriggerServerEvent("boxville-cones:server:TakeCone", netEntity, 'left')
+				Notify('notify.take')
 			end
 		}
 	},
@@ -27,11 +29,13 @@ exports['qb-target']:AddTargetBone("cone_r", {
 			action = function(entity)
 				local netEntity = VehToNet(entity)
 
-				if PlayerHasCone then
+                if PlayerHasCone then
+					Notify('notify.put_back')
 					return TriggerServerEvent('boxville-cones:server:PlaceConeInVan', netEntity, 'right')
 				end
 
-				TriggerServerEvent("boxville-cones:server:TakeCone", netEntity, 'right')
+                TriggerServerEvent("boxville-cones:server:TakeCone", netEntity, 'right')
+				Notify('notify.take')
 			end
 		}
 	},
@@ -68,7 +72,8 @@ RegisterNetEvent('boxville-cones:client:PlaceCone', function()
 	TaskPlayAnim(ped, Config.DropAnimation[1], Config.DropAnimation[2], 8.0, -8.0, -1, 0, 0, false, false, false)
 	RemoveAnimDict(Config.DropAnimation[1])
 
-	Wait(930)
+    Wait(930)
+	Notify('notify.place')
 
 	RequestModel(Config.ConeProp)
 
@@ -106,6 +111,7 @@ RegisterNetEvent('boxville-cones:client:AddTarget', function(netId)
 				action = function(entity)
 					if PlayerHasCone then return end
 
+					Notify('notify.take')
 					TriggerServerEvent('boxville-cones:server:DeleteCone', ObjToNet(entity))
 					TriggerEvent('boxville-cones:client:TakeCone')
 				end
@@ -145,9 +151,13 @@ AddEventHandler('QBCore:Client:OnPlayerLoaded', function()
 					icon = Config.PickupIcon,
 					label = Lang:t('text.resupply'),
 					action = function()
-						if PlayerHasCone then return CancelEmote() end
+                        if PlayerHasCone then
+							Notify('notify.put_back')
+							return CancelEmote()
+						end
 
-						TriggerEvent('boxville-cones:client:TakeCone')
+                        TriggerEvent('boxville-cones:client:TakeCone')
+						Notify('notify.take')
 					end
 				}
 			},
@@ -156,3 +166,7 @@ AddEventHandler('QBCore:Client:OnPlayerLoaded', function()
 		})
 	end
 end)
+
+function Notify(message)
+	QBCore.Functions.Notify(Lang:t(message), 'success', Config.NotifyDuration)
+end

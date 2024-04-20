@@ -16,13 +16,13 @@ client_scripts {
 server_scripts {
 	'server/sv_main.lua',
 	'server/sv_debug.lua'
-
+ 
 }
 
 shared_scripts {
     'config.lua',
-	'@qb-core/shared/locale.lua',
-	'lang/en.lua'
+    '@qb-core/shared/locale.lua',
+	'lang/*.lua'
 }
 
 data_file 'DLC_ITYP_REQUEST' 'stream/box_cones_ytyp.ytyp'

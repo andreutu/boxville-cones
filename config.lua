@@ -1,6 +1,7 @@
 Config = {}
 
 Config.Distance = 1.5
+Config.NotifyDuration = 1500
 
 Config.PickupIcon = 'custom cone-pickup'
 Config.PlaceIcon = 'custom cone-place'
