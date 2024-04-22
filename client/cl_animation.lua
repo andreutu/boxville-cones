@@ -69,7 +69,7 @@ function PlayEmote()
 		title = Lang:t('text.place'),
 		icon = Config.PlaceIcon,
 		type = 'client',
-		event = 'boxville-cones:client:PlaceCone',
+		event = 'boxville-cones:client:placeCone',
 		shouldClose = true
 	}, 'boxville-cones:placeCone')
 

@@ -10,10 +10,10 @@ exports['qb-target']:AddTargetBone("cone_l", {
 
 				if PlayerHasCone then
 					Notify('notify.put_back')
-					return TriggerServerEvent('boxville-cones:server:PlaceConeInVan', netEntity, 'left')
+					return TriggerServerEvent('boxville-cones:server:placeConeInVan', netEntity, 'left')
 				end
 
-				TriggerServerEvent("boxville-cones:server:TakeCone", netEntity, 'left')
+				TriggerServerEvent("boxville-cones:server:takeCone", netEntity, 'left')
 				Notify('notify.take')
 			end
 		}
@@ -31,10 +31,10 @@ exports['qb-target']:AddTargetBone("cone_r", {
 
 				if PlayerHasCone then
 					Notify('notify.put_back')
-					return TriggerServerEvent('boxville-cones:server:PlaceConeInVan', netEntity, 'right')
+					return TriggerServerEvent('boxville-cones:server:placeConeInVan', netEntity, 'right')
 				end
 
-				TriggerServerEvent("boxville-cones:server:TakeCone", netEntity, 'right')
+				TriggerServerEvent("boxville-cones:server:takeCone", netEntity, 'right')
 				Notify('notify.take')
 			end
 		}
@@ -53,7 +53,7 @@ exports['qb-target']:AddTargetModel(Config.RessuplyPointsProp, {
 					return CancelEmote()
 				end
 
-				TriggerEvent('boxville-cones:client:TakeCone')
+				TriggerEvent('boxville-cones:client:takeCone')
 				Notify('notify.take')
 			end
 		}
@@ -62,95 +62,13 @@ exports['qb-target']:AddTargetModel(Config.RessuplyPointsProp, {
 	distance = Config.Distance
 })
 
-RegisterNetEvent('boxville-cones:client:TakeCone', function()
-	PlayEmote()
-end)
-
-RegisterNetEvent('boxville-cones:client:PlaceConeInVan', function()
-	CancelEmote()
-end)
-
-RegisterNetEvent('boxville-cones:client:ToggleCones', function(veh, stack, toggle)
-	local extra
-
-	if stack == 'left' then
-		extra = Config.LeftExtra
-	elseif stack == 'right' then
-		extra = Config.RightExtra
-	end
-
-	SetVehicleExtra(NetToVeh(veh), extra, toggle)
-end)
-
-RegisterNetEvent('boxville-cones:client:PlaceCone', function()
-	exports['qb-radialmenu']:RemoveOption('boxville-cones:placeCone')
-
-	local ped = PlayerPedId()
-
-	LoadAnim(Config.DropAnimation[1])
-	StopAnimTask(ped, Config.ConeAnimation[1], Config.ConeAnimation[2], 1.0)
-	TaskPlayAnim(ped, Config.DropAnimation[1], Config.DropAnimation[2], 8.0, -8.0, -1, 0, 0, false, false, false)
-	RemoveAnimDict(Config.DropAnimation[1])
-
-	Wait(930)
-	Notify('notify.place')
-
-	RequestModel(Config.ConeProp)
-
-	while not HasModelLoaded(Config.ConeProp) do
-		Wait(0)
-	end
-
-	DestroyCone()
-
-	local coords = GetEntityCoords(ped)
-	local heading = GetEntityHeading(ped)
-	local vector = GetEntityForwardVector(ped)
-	local x, y, z = table.unpack(coords + vector * 0.5)
-	local obj = CreateObject(Config.ConeProp, x, y, z, true, true, true)
-	local netId = NetworkGetNetworkIdFromEntity(obj)
-	SetNetworkIdExistsOnAllMachines(netId, true)
-	SetNetworkIdCanMigrate(netId, false)
-	SetEntityHeading(obj, heading)
-	PlaceObjectOnGroundProperly(obj)
-	SetModelAsNoLongerNeeded(obj)
-
-	Wait(100)
-
-	TriggerServerEvent('boxville-cones:server:AddTarget', netId)
-
-	IsInAnimation = false
-end)
-
-RegisterNetEvent('boxville-cones:client:AddTarget', function(netId)
-	exports['qb-target']:AddTargetEntity(NetworkGetEntityFromNetworkId(netId), {
-		options = {
-			{
-				icon = Config.PickupIcon,
-				label = Lang:t('text.take'),
-				action = function(entity)
-					if PlayerHasCone then return end
-
-					Notify('notify.take')
-					TriggerServerEvent('boxville-cones:server:DeleteCone', ObjToNet(entity))
-					TriggerEvent('boxville-cones:client:TakeCone')
-				end
-			}
-		},
-
-		distance = Config.Distance
-	})
-end)
-
-RegisterNetEvent('boxville-cones:client:DeleteCone', function(entity)
-	DeleteEntity(NetToObj(entity))
-end)
-
-AddEventHandler('QBCore:Client:OnPlayerLoaded', function()
-	Wait(1000)
-	TriggerServerEvent('boxville-cones:server:LoadCones')
-end)
+RegisterNetEvent('boxville-cones:client:takeCone')
+RegisterNetEvent('boxville-cones:client:placeConeInVan')
+RegisterNetEvent('boxville-cones:client:toggleCones')
+RegisterNetEvent('boxville-cones:client:placeCone')
+RegisterNetEvent('boxville-cones:client:addTarget')
+RegisterNetEvent('boxville-cones:client:deleteCone')
 
 function Notify(message)
-	QBCore.Functions.Notify(Lang:t(message), 'success', Config.NotifyDuration)
+	QBCore.Functions.Notify(Lang:t(message), 'primary', Config.NotifyDuration)
 end
