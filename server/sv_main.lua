@@ -12,7 +12,7 @@ RegisterNetEvent("boxville-cones:server:placeConeInVan", function(vehicle, stack
 			Entity(entity).state.leftCones = amount + 1
 			TriggerClientEvent('boxville-cones:client:placeConeInVan', source, entity, stack)
 		else
-			return
+			return TriggerClientEvent('boxville-cones:client:failNotify', source, 'notify.error_full')
 		end
 	elseif stack == "right" then
 		amount = Entity(entity).state.rightCones or Config.DefaultRightCones
@@ -21,7 +21,7 @@ RegisterNetEvent("boxville-cones:server:placeConeInVan", function(vehicle, stack
 			Entity(entity).state.rightCones = amount + 1
 			TriggerClientEvent('boxville-cones:client:placeConeInVan', source, entity, stack)
 		else
-			return
+			return TriggerClientEvent('boxville-cones:client:failNotify', source, 'notify.error_full')
 		end
 	end
 
@@ -46,7 +46,7 @@ RegisterNetEvent("boxville-cones:server:takeCone", function(vehicle, stack)
 			Entity(entity).state.leftCones = amount - 1
 			TriggerClientEvent('boxville-cones:client:takeCone', source, entity, stack)
 		else
-			return
+			return TriggerClientEvent('boxville-cones:client:failNotify', source, 'notify.error_empty')
 		end
 	elseif stack == "right" then
 		amount = Entity(entity).state.rightCones or Config.DefaultRightCones
@@ -55,7 +55,7 @@ RegisterNetEvent("boxville-cones:server:takeCone", function(vehicle, stack)
 			Entity(entity).state.rightCones = amount - 1
 			TriggerClientEvent('boxville-cones:client:takeCone', source, entity, stack)
 		else
-			return
+			return TriggerClientEvent('boxville-cones:client:failNotify', source, 'notify.error_empty')
 		end
 	end
 

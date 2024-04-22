@@ -7,7 +7,7 @@ local function createResupplyBox(index)
 		Wait(0)
 	end
 
-    local obj = CreateObject(Config.RessuplyPointsProp, x, y, z, true, true, false)
+	local obj = CreateObject(Config.RessuplyPointsProp, x, y, z, true, true, false)
 	SetEntityHeading(obj, w)
 	PlaceObjectOnGroundProperly(obj)
 end

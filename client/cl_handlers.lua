@@ -1,8 +1,10 @@
 AddEventHandler('boxville-cones:client:takeCone', function()
+	Notify('notify.take')
 	PlayEmote()
 end)
 
 AddEventHandler('boxville-cones:client:placeConeInVan', function()
+	Notify('notify.put_back')
 	CancelEmote()
 end)
 
@@ -65,9 +67,11 @@ AddEventHandler('boxville-cones:client:addTarget', function(netId)
 				icon = Config.PickupIcon,
 				label = Lang:t('text.take'),
 				action = function(entity)
-					if PlayerHasCone then return end
+					if PlayerHasCone then
+						FailNotify('notify.error_inhand')
+						return
+					end
 
-					Notify('notify.take')
 					TriggerServerEvent('boxville-cones:server:deleteCone', ObjToNet(entity))
 					TriggerEvent('boxville-cones:client:takeCone')
 				end
@@ -85,4 +89,8 @@ end)
 AddEventHandler('QBCore:Client:OnPlayerLoaded', function()
 	Wait(1000)
 	TriggerServerEvent('boxville-cones:server:loadCones')
+end)
+
+AddEventHandler('boxville-cones:client:failNotify', function(message)
+	FailNotify(message)
 end)

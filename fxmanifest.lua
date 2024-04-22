@@ -10,7 +10,7 @@ lua54 'yes'
 client_scripts {
 	'client/cl_main.lua',
 	'client/cl_animation.lua',
-    'client/cl_resupplies.lua',
+	'client/cl_resupplies.lua',
 	'client/cl_handlers.lua'
 }
 
@@ -20,8 +20,8 @@ server_scripts {
 }
 
 shared_scripts {
-    'config.lua',
-    '@qb-core/shared/locale.lua',
+	'config.lua',
+	'@qb-core/shared/locale.lua',
 	'lang/*.lua'
 }
 

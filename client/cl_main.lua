@@ -9,15 +9,14 @@ exports['qb-target']:AddTargetBone("cone_l", {
 				local netEntity = VehToNet(entity)
 
 				if PlayerHasCone then
-					Notify('notify.put_back')
 					return TriggerServerEvent('boxville-cones:server:placeConeInVan', netEntity, 'left')
 				end
 
 				TriggerServerEvent("boxville-cones:server:takeCone", netEntity, 'left')
-				Notify('notify.take')
 			end
 		}
 	},
+
 	distance = Config.Distance,
 })
 
@@ -30,15 +29,14 @@ exports['qb-target']:AddTargetBone("cone_r", {
 				local netEntity = VehToNet(entity)
 
 				if PlayerHasCone then
-					Notify('notify.put_back')
 					return TriggerServerEvent('boxville-cones:server:placeConeInVan', netEntity, 'right')
 				end
 
 				TriggerServerEvent("boxville-cones:server:takeCone", netEntity, 'right')
-				Notify('notify.take')
 			end
 		}
 	},
+
 	distance = Config.Distance,
 })
 
@@ -68,7 +66,12 @@ RegisterNetEvent('boxville-cones:client:toggleCones')
 RegisterNetEvent('boxville-cones:client:placeCone')
 RegisterNetEvent('boxville-cones:client:addTarget')
 RegisterNetEvent('boxville-cones:client:deleteCone')
+RegisterNetEvent('boxville-cones:client:failNotify')
 
 function Notify(message)
 	QBCore.Functions.Notify(Lang:t(message), 'primary', Config.NotifyDuration)
+end
+
+function FailNotify(message)
+	QBCore.Functions.Notify(Lang:t(message), 'error', Config.NotifyDuration)
 end
