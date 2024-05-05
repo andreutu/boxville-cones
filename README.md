@@ -32,7 +32,7 @@ TODO
 
 ## Upcoming Features
 
-- [ ] Various restrictions that apply when a player is holding a cone (e.g. not being able to get into a vehicle).
+- [x] Various restrictions that apply when a player is holding a cone (e.g. not being able to get into a vehicle).
 - [ ] Cone preview, giving users a glance of where their cone will be positioned (maybe??).
 
 # Contributing
