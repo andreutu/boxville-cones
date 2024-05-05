@@ -1,9 +1,12 @@
 AddEventHandler('boxville-cones:client:takeCone', function()
 	Notify('notify.take')
+	DisableActions()
 	PlayEmote()
 end)
 
 AddEventHandler('boxville-cones:client:placeConeInVan', function()
+	LimitControls = false
+	LocalPlayer.state:set('inv_busy', false, false)
 	Notify('notify.put_back')
 	CancelEmote()
 end)
@@ -21,6 +24,8 @@ AddEventHandler('boxville-cones:client:toggleCones', function(veh, stack, toggle
 end)
 
 AddEventHandler('boxville-cones:client:placeCone', function()
+	LimitControls = false
+	LocalPlayer.state:set('inv_busy', false, false)
 	exports['qb-radialmenu']:RemoveOption('boxville-cones:placeCone')
 
 	local ped = PlayerPedId()

@@ -1,4 +1,5 @@
 local QBCore = exports['qb-core']:GetCoreObject()
+LimitControls = false
 
 exports['qb-target']:AddTargetBone("cone_l", {
 	options = {
@@ -74,4 +75,32 @@ end
 
 function FailNotify(message)
 	QBCore.Functions.Notify(Lang:t(message), 'error', Config.NotifyDuration)
+end
+
+function DisableActions()
+	LimitControls = true
+	LocalPlayer.state:set('inv_busy', true, false)
+
+	Citizen.CreateThread(function()
+		while LimitControls do
+			Citizen.Wait(0)
+
+			DisableControlAction(0, 75, true) -- Vehicle Exit
+			DisableControlAction(0, 23, true) -- Vehicle Enter
+			DisableControlAction(0, 22, true) -- Jumping
+
+			-- Melee
+			DisableControlAction(0, 24, true)
+			DisableControlAction(0, 25, true)
+			DisableControlAction(0, 47, true)
+			DisableControlAction(0, 58, true)
+			DisableControlAction(0, 263, true)
+			DisableControlAction(0, 264, true)
+			DisableControlAction(0, 257, true)
+			DisableControlAction(0, 140, true)
+			DisableControlAction(0, 141, true)
+			DisableControlAction(0, 142, true)
+			DisableControlAction(0, 143, true)
+		end
+	end)
 end
